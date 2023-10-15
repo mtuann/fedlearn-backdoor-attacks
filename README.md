@@ -17,6 +17,14 @@ This github project provided a fast integration for readers to work in the field
 # How to develop from this project
 - Define dataset in `dataset.py` file.
 - Define your own attack method in `attack_methods.py` file.
+- Define your own defense method in `defense_methods.py` file.
+- Define your own model in `model.py` file.
+---
+Run the following command to start the project:
+```
+bash method.sh
+```
+---
 
 # Survey Papers for Machine Learning Security
 <!-- MD Table -->
