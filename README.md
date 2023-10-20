@@ -26,6 +26,39 @@ bash method.sh
 ```
 ---
 
+# Dataset for Backdoor Attack in FL
+<!-- MD Table -->
+|Dataset|Case|Description|
+| :--- | :--- | :--- |
+|MNIST|Case 1|The MNIST database of handwritten digits, has a training set of 60,000 examples, and a test set of 10,000 examples.|
+
+
+[Edge-case backdoors](https://proceedings.neurips.cc/paper/2020/hash/b8ffa41d4e492f0fad2f13e29e1762eb-Abstract.html): 
+
+# Experiments setting
+- Dataset: MNIST, CIFAR-10, CIFAR-100, etc.
+- Attack methods: DBA, LIRA, BackdoorBox, 3DFed, Chameleon, etc.
+- Defense methods: Krum, RFA, FoolsGold, etc.
+- Model: CNN, ResNet, etc.
+- Hyperparameters: learning rate, batch size, etc.
+<!-- Experiments setting Table -->
+|Dataset|Backdoor-case|Attack methods|Defense methods|Model|Hyperparameters|$\mathcal{D}_{edge}$|
+|:--- | :--- | :--- | :--- | :--- | :--- | :--- |
+|CIFAR-10|Edge-case|-|-|VGG-9|K = 200, m = 10|Southwest Airline’s planes (truck)|
+|EMNIST|Edge-case|-|-|LeNet|K = 3383, m = 30|"7"s from Ardis (1) |
+|ImageNet (ILSVRC-2012)|Edge-case|-|-|VGG-11|K = 1000, m = 10| certain ethnic dresses (irrelevant label) |
+
+
+# Working with FedML
+- [FedML README.md](https://github.com/FedML-AI/FedML/blob/master/python/fedml/core/security/readme.md)
+
+Types of Attacks in FL setting:
+- Byzantine Attack: 
+- DLG Attack: 
+- Backdoor Attack: 
+- Model Replacement Attack: 
+
+
 # Survey Papers for Machine Learning Security
 <!-- MD Table -->
 | Title | Year | Venue | Code | Dataset | URL | Note |
@@ -66,3 +99,4 @@ bash method.sh
 
 ## Other Resources for Backdoor Attack in ML/ FL
 - [List of papers on data poisoning and backdoor attacks](https://github.com/penghui-yang/awesome-data-poisoning-and-backdoor-attacks)
+- [Proceedings of Machine Learning Research](https://proceedings.mlr.press/)
