@@ -2,7 +2,14 @@ Table of Contents
 -----------------
 
 
+# Setup Python Environment
+- Set the name of environment in both files: `environment.yml` and `Makefile`. The default name is `aba`, aka "all backdoor attacks" and then run following commands:
+```
+    make install
+```
+
 # Guideline for custome training (Atk vs Def)
+
 ## Data Customization
 - [Data Loader](https://github.com/FedML-AI/FedML/blob/master/doc/en/simulation/user_guide/data_loader_customization.md)
 

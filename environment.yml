@@ -1,0 +1,13 @@
+name: aba
+channels:
+  - conda
+  - conda-forge
+  - pytorch
+  - nvidia
+dependencies:
+  - python=3.8
+  - pip
+  - pytest
+  - ipython==8.13.2
+  - pytorch==2.0.1
+  - torchvision==0.15.2
