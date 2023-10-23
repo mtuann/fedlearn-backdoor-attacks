@@ -1,13 +1,23 @@
-name: aba
+name: aba # Name of the Conda environment
+
 channels:
-  - conda
-  - conda-forge
-  - pytorch
-  - nvidia
+  - defaults  # You can add other channels if needed
+
 dependencies:
-  - python=3.8
-  - pip
-  - pytest
-  - ipython==8.13.2
-  - pytorch==2.0.1
-  - torchvision==0.15.2
+  - python=3.8  # Python version
+  - numpy=1.21.2  # Example package with version
+  - pandas=1.3.3  # Another package with a specific version
+  - pytorch=1.9.0  # PyTorch version
+  - torchvision=0.10.0  # Torchvision version
+  - pip  # Install pip
+  - pip:
+    # - torchattacks==3.1.0  # Install torchattacks
+    # - torchsummary==1.5.1  # Install torchsummary
+    # - torchmetrics==0.5.1  # Install torchmetrics
+    # - torch_optimizer==0.1.0  # Install torch_optimizer
+    - tqdm==4.62.3  # Install tqdm
+    - matplotlib==3.4.3  # Install matplotlib
+    - seaborn==0.11.2  # Install seaborn
+    # - scikit-learn==0.24.2  # Install scikit-learn
+    # - scikit-image==0.18.3  # Install scikit-image
+    # - opencv-python==
