@@ -19,7 +19,7 @@ Table of Contents
 
 ## Attack Customization
 ### [Model Replacement Attack (MRA)](https://arxiv.org/pdf/1807.00459.pdf)
-- Code is in `fedlearn-backdoor-attacks/3DFed/attacks/modelreplace.py`
+- [Code](https://github.com/ebagdasa/backdoors101) is in `fedlearn-backdoor-attacks/3DFed/attacks/modelreplace.py`
 ![Alt text](uploaded-figures/model-replacement-attack.png)
 
 
@@ -36,6 +36,7 @@ Table of Contents
 
 
 ## Flow of the code:
+### [3DFed (ThrDFed) - S&P'23](https://github.com/haoyangliASTAPLE/3DFed)
 - Init data, attack, defense method in `fedlearn-backdoor-attacks/3DFed/helper.py`
 - Run fl round in `fedlearn-backdoor-attacks/3DFed/training.py`
     - Sample user for round (fl_no_models/ fl_total_participants)
@@ -48,8 +49,64 @@ Table of Contents
     - Perform Attack and aggregate results
         - check update_global_model with weight: 1/total_participants (self.params.fl_eta / self.params.fl_total_participants)
     - Limitation: Currently, dump fl_no_models (set = fl_total_participants) models  in each round into file, only one attacker is supported (other attackers is duplicated from attacker 0)
+### [DBA - ICLR'20 (Distributed Backdoor Attack)](https://github.com/AI-secure/DBA)
+
+### [Attack of the Tails: Yes, You Really Can Backdoor Federated Learning - NeurIPS'20](https://github.com/ksreenivasan/OOD_Federated_Learning)
+
+Load poisoned dataset (in `simulated_averaging.py`):
+```python
+poisoned_train_loader, vanilla_test_loader, targetted_task_test_loader, num_dps_poisoned_dataset, clean_train_loader = load_poisoned_dataset(args=args)
+```
+
+Two modes (fixed-freq mode or fixed-pool mode):
+```python
+Intotal: N (num_nets) clients, K (part_nets_per_round) clients are participating in each round
+
+- Fixed-freq Attack (`FrequencyFederatedLearningTrainer`): 
+    - "attacking_fl_rounds":[i for i in range(1, args.fl_round + 1) if (i-1)%10 == 0]
+    - poison_type in ["ardis": ["normal-case", "almost-edge-case", "edge-case"], "southwest"]
+    - Training in each communication round: 
+        - if round in attacking_fl_rounds, run attack
+            - One attacker, and K-1 benign clients
+            - For attacker, run attack in `adversarial_local_training_period` epochs 
+                - data_loader = `poisoned_train_loader`
+                - Check defense_technique in ["krum", "multi-krum"]: eps=self.eps*self.args_gamma**(flr-1); else eps=self.eps
+                - Test on `vanilla_test_loader` and `targetted_task_test_loader`
+                - Check model_replacement scale models with ratio: total_num_dps_per_round/num_dps_poisoned_dataset
+                - Print norm before and after scale
+            - For benign clients, run normal training in `local_training_period` epochs
+                - data_loader = `clean_train_loader`
+        - otherwise
+            - run normal training with K benign clients
+        - Aggregate models
+            - using 
+    - TODO: check prox-attack
+
+    - test function:
+        - check dataset:
+            - dataset in ["mnist", "emnist"]:
+                - target_class = 7
+                - task in ["raw-task", "targeted"]
+                - poison_type in ["ardis"]
+            - dataset in ["cifar10"]:
+                - target_class = 2 for greencar in ("howto", "greencar-neo"), 
+                - target_class = 9 for southwest
+        - TODO: check backdoor acc calculation (line 248-253)
+    
+- Fixed-pool Attack:
+    - In each round of communication, randomly select K clients to participate in the training
+        - selected_attackers from "__attacker_pool" (numpy random choice attacker_pool_size/ num_nets)
+        - selected_benign_clients
+        All attackers are sharing the same poisoned dataset
+        - Training the same as Fixed-freq Attack for each attacker
+
+- defense_technique in ["no-defense", "norm-clipping", "weak-dp", "krum", "multi-krum", "rfa"]
+```
+For more details, check `FedML` [dataset](https://github.com/FedML-AI/FedML/tree/master/python/fedml/data/edge_case_examples)
+
+
 ## TODO:
-- [ ] Setting standard FL attack from Attack at the Tail and DBA
+- [ ] Setting standard FL attack from Attack of the Tails and DBA
 - [ ] Change dump to file -> dump to memory
 - [ ] Check popular defense method: Foolsgold, RFA, ...
 
