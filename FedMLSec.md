@@ -23,7 +23,6 @@ Table of Contents
 ![Alt text](uploaded-figures/model-replacement-attack.png)
 
 
-
 ## Defense Customization
 
 ## Training Customization
@@ -50,6 +49,15 @@ Table of Contents
         - check update_global_model with weight: 1/total_participants (self.params.fl_eta / self.params.fl_total_participants)
     - Limitation: Currently, dump fl_no_models (set = fl_total_participants) models  in each round into file, only one attacker is supported (other attackers is duplicated from attacker 0)
 ### [DBA - ICLR'20 (Distributed Backdoor Attack)](https://github.com/AI-secure/DBA)
+- List of adversarial clients in config file: adversary_list: [17, 33, 77, 11]
+    - no_models: K = 10
+    - number_of_total_participants: N = 100
+- agent_name_keys: id of client that participate in each round (K/ N)
+    - agent_name_keys = benign + adv (check adv first, then benign); set epoch attack for each client in .yaml file
+In each communication round:
+    - Check the trigger is global pattern or local pattern
+    - Get poison batch data from adversary_index (-1, 0, 1, 2, 3)
+
 
 ### [Attack of the Tails: Yes, You Really Can Backdoor Federated Learning - NeurIPS'20](https://github.com/ksreenivasan/OOD_Federated_Learning)
 
