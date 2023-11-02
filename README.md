@@ -40,8 +40,11 @@ bash method.sh
 <!-- MD Table -->
 |Dataset|Case|Description|
 | :--- | :--- | :--- |
-|MNIST|Case 1|The MNIST database of handwritten digits, has a training set of 60,000 examples, and a test set of 10,000 examples.|
-
+|MNIST|Case -|The MNIST database of handwritten digits, has a training set of 60,000 examples, and a test set of 10,000 examples.|
+CIFAR-10|Case -|The CIFAR-10 dataset consists of 60000 32x32 colour images in 10 classes, with 6000 images per class. There are 50000 training images and 10000 test images|
+CIFAR-100|Case -|The CIFAR-100 dataset consists of 60000 32x32 colour images in 100 classes, with 600 images per class., 500 training images and 100 testing images per class.|
+Tiny ImageNet|Case -|The Tiny ImageNet contains 200 image classes, a training dataset of 100,000 images, a validation dataset of 10,000 images, and a test dataset of 10,000 images (50 validation and 50 test images per class). All images are of size 64×64|
+|EMNIST|Case -|There are 62 classes (10 digits, 26 lowercase, 26 uppercase), 814255 samples, 697932 training samples, 116323 test samples.
 
 [Edge-case backdoors](https://proceedings.neurips.cc/paper/2020/hash/b8ffa41d4e492f0fad2f13e29e1762eb-Abstract.html)
 
