@@ -5,3 +5,6 @@ PFL-Non-IID/
 3DFed/
 OOD_Federated_Learning/
 RLBackdoorFL/
+__pycache__/
+*.pyc
+saved_models/

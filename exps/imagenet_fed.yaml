@@ -1,0 +1,48 @@
+task: Imagenet
+synthesizer: Pattern
+
+data_path: .data/tiny-imagenet-200
+
+batch_size: 64
+test_batch_size: 100
+lr: 0.001
+momentum: 0.9
+decay: 0.0005
+epochs: 40
+poison_epoch: 20
+poison_epoch_stop: 50
+save_on_epochs: [] # [10, 20, 30, 40, 50]
+optimizer: SGD
+log_interval: 100
+
+poisoning_proportion: 0.3
+backdoor_label: 8
+
+resume_model: tiny_64_pretrain/tiny-resnet.epoch_20
+
+save_model: False
+log: True
+report_train_loss: False
+
+transform_train: True
+
+fl: True
+fl_no_models: 100
+fl_local_epochs: 2
+fl_poison_epochs: 10
+fl_total_participants: 100
+fl_eta: 1
+fl_sample_dirichlet: True
+fl_dirichlet_alpha: 0.5
+
+fl_number_of_adversaries: 20
+# fl_number_of_scapegoats: 0
+fl_weight_scale: 5
+fl_adv_group_size: 5
+# fl_single_epoch_attack: 10
+
+attack: ThrDFed
+defense: FLDetector
+fl_num_neurons: 100
+noise_mask_alpha: 0 # 0.5
+lagrange_step: 0.1
