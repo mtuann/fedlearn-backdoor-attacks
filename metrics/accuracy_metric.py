@@ -16,9 +16,11 @@ class AccuracyMetric(Metric):
         batch_size = labels.shape[0]
 
         _, pred = outputs.topk(max_k, 1, True, True)
-        pred = pred.t()
+        # get value and index of top k classes
+        pred = pred.t() # view as column vector
+        # expand labels to match pred size: 2D size (top_k, batch_size)
         correct = pred.eq(labels.view(1, -1).expand_as(pred))
-
+        # correct: True/ False matrix
         res = dict()
         for k in self.top_k:
             correct_k = correct[:k].view(-1).float().sum(0)

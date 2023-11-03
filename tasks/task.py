@@ -3,7 +3,8 @@ import random
 from typing import List, Any, Dict
 from copy import deepcopy
 import numpy as np
-from collections import defaultdict
+from collections import defaultdict, Counter
+
 
 import torch
 from torch import optim, nn
@@ -52,28 +53,41 @@ class Task:
 
     def init_task(self):
         self.load_data()
+        # self.stat_data()
+        
         self.model = self.build_model()
         self.resume_model()
         self.model = self.model.to(self.params.device)
 
         self.local_model = self.build_model().to(self.params.device)
+        
         self.criterion = self.make_criterion()
         self.adversaries = self.sample_adversaries()
 
-        # self.optimizer = self.make_optimizer()
+        self.optimizer = self.make_optimizer()
+        
         self.metrics = [AccuracyMetric(), TestLossMetric(self.criterion)]
         self.set_input_shape()
-
         # Initialize the logger
         fh = logging.FileHandler(
                 filename=f'{self.params.folder_path}/log.txt')
-        formatter = logging.Formatter('%(message)s')
+        formatter = logging.Formatter('%(asctime)s - %(filename)s - Line:%(lineno)d  - %(levelname)-8s - %(message)s')
+        
+        
         fh.setFormatter(formatter)
         logger.addHandler(fh)
 
     def load_data(self) -> None:
         raise NotImplemented
 
+    def stat_data(self):
+        for i, loader in enumerate(self.fl_train_loaders):
+            labels = [t.item() for data, target in loader for t in target]
+            label_counts = dict(sorted(Counter(labels).items()))
+            total_samples = sum(len(target) for _, target in loader)
+            logger.debug(f"Participant {i:2d} has {label_counts} and total {total_samples} samples")
+
+    
     def build_model(self) -> Module:
         raise NotImplemented
 
@@ -105,8 +119,7 @@ class Task:
     def resume_model(self):
         if self.params.resume_model:
             logger.info(f'Resuming training from {self.params.resume_model}')
-            loaded_params = torch.load(f"saved_models/"
-                                       f"{self.params.resume_model}",
+            loaded_params = torch.load(f"{self.params.resume_model}",
                                     map_location=torch.device('cpu'))
             self.model.load_state_dict(loaded_params['state_dict'])
             self.params.start_epoch = loaded_params['epoch']
@@ -119,6 +132,7 @@ class Task:
     def set_input_shape(self):
         inp = self.train_dataset[0][0]
         self.params.input_shape = inp.shape
+        logger.info(f"Input shape is {self.params.input_shape}")
 
     def get_batch(self, batch_id, data) -> Batch:
         """Process data into a batch.

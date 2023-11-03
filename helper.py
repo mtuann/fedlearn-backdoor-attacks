@@ -37,7 +37,7 @@ class Helper:
             
         self.make_folders()
         
-        # self.make_task()
+        self.make_task()
         
         # self.make_synthesizer()
         

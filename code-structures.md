@@ -7,39 +7,14 @@ Tree structure
 .
 ├── README.md
 ├── training.py
-│   ├── __init__.py
-├── dataset.py
-├── model.py
-├── attack_methods.py
-├── defense_methods.py
-├── method.sh
+├── helper.py
 ├── utils
-│   ├── __init__.py
-│   ├── logger.py
-│   ├── metrics.py
-│   ├── plot.py
-│   ├── save_load.py
-│   └── utils.py
+│   ├── params.py
+│   ├── utils.py
 ├── data
 │   ├── MNIST
-│   │   ├── processed
-│   │   │   ├── test.pt
-│   │   │   └── training.pt
-│   │   └── raw
-│   │       ├── t10k-images-idx3-ubyte
-│   │       ├── t10k-images-idx3-ubyte.gz
-│   │       ├── t10k-labels-idx1-ubyte
-│   │       ├── t10k-labels-idx1-ubyte.gz
-│   │       ├── train-images-idx3-ubyte
-│   │       ├── train-images-idx3-ubyte.gz
-│   │       ├── train-labels-idx1-ubyte
-│   │       └── train-labels-idx1-ubyte.gz
 │   ├── CIFAR-10
-│   │   ├── processed
-│   │   │   ├── test_batch
-│   │   │   ├── training_batch_1
-│   │   │   ├── training_batch_2
-│   │   │   ├── training_batch_3
+│   ├── CIFAR-100
 ```
 
 Running code:
@@ -47,3 +22,25 @@ Running code:
 ```
 python training.py --name mnist --params exps/mnist_fed.yaml
 ```
+Flow of the code:
+-----------------
+1. `training.py` is the main file that is run.
+- It parses the arguments and loads the parameters from the yaml file.
+- Load all the configurations to `helper.py` (parameters as a variable in a `Helper` class)
+
+Perform the following steps for each round:
+- Training `epochs` communcation rounds
+- Traing each round for `fl_local_epochs` epochs
+- Evaluate the model on the test set
+
+
+1. Define the `task.py` in the `tasks` folder, that inherits from the `Task` class.
+- `Task` class has following functions:
+  - `load_data` - load the data from the `data` folder, and split it for different clients.
+  - `build_model` - build the model for the task
+  - `resume_model` - resume the model from the checkpoint
+  - `make_criterion` - define the loss function for the task.
+  - `make_optimizer` - define the optimizer for the task.
+  - `sample_adversaries` - sample the adversaries for the task.
+  - `train` - train the model for one epoch.
+  - `metrics` - define the metrics for the task, 2 main metrics are `AccuracyMetric` (top-k metrics) and `TestLossMetric`.
