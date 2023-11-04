@@ -116,6 +116,7 @@ For more details, check `FedML` [dataset](https://github.com/FedML-AI/FedML/tree
 - Generate trigger in file `synthesizers/pattern_synthesizer.py`. The 2 images below are the pattern of the trigger and image with trigger.
 <!-- ![Alt text](uploaded-figures/Figure_full-image-pattern.png)
 ![Alt text](uploaded-figures/Figure_4_ba_norm.png) -->
+- All the original images and trigger images are normalized to [mean, std] of the original dataset
 
 <div style="display:flex">
     <img src="uploaded-figures/Figure_full-image-pattern.png" 

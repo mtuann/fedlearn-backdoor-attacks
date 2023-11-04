@@ -27,17 +27,17 @@ transform_train: True
 
 fl: True
 fl_no_models: 5
-fl_local_epochs: 2
+fl_local_epochs: 1
 # fl_poison_epochs: 15
-fl_poison_epochs: 2
+fl_poison_epochs: 5
 fl_total_participants: 10
 fl_eta: 1 # 0.8
 fl_sample_dirichlet: True
 fl_dirichlet_alpha: 0.9
 
 fl_number_of_adversaries: 2
-fl_weight_scale: 10
-fl_adv_group_size: 5
+fl_weight_scale: 1
+fl_adv_group_size: 2
 # fl_single_epoch_attack: 200
 
 attack: ModelReplace

@@ -85,6 +85,7 @@ class Params:
     fl_single_epoch_attack: int = None
     fl_weight_scale: int = 1
     fl_round_participants: List[int] = None
+    fl_weight_contribution: List[float] = None
     
     attack: str = None #'ThrDFed' (3DFed), 'ModelRplace' (Model Replacement)
     

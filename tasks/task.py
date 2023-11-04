@@ -163,9 +163,19 @@ class Task:
         for metric in self.metrics:
             metric_text.append(str(metric))
         logger.warning(f'{prefix} {step:4d}. {" | ".join(metric_text)}')
-
+        # import IPython; IPython.embed()
+        # exit(0)
         return  self.metrics[0].get_main_metric_value()
-
+    def get_metrics(self):
+        # TODO Nov 11, 2023: This is a hack to get the metrics
+        metric_dict = {
+            'accuracy': self.metrics[0].get_main_metric_value(),
+            'loss': self.metrics[1].get_main_metric_value()
+        }
+        # for metric in self.metrics:
+        #     metric_dict[metric.name] = metric.get_value()
+        return metric_dict
+    
     @staticmethod
     def get_batch_accuracy(outputs, labels, top_k=(1,)):
         """Computes the precision@k for the specified values of k"""
@@ -195,8 +205,8 @@ class Task:
             range(self.params.fl_total_participants),
             self.params.fl_no_models)
         
-        if 7 not in sampled_ids:
-            sampled_ids[0] = 7
+        # if 7 not in sampled_ids:
+        #     sampled_ids[0] = 7
         
         sampled_users = []
         for pos, user_id in enumerate(sampled_ids):
@@ -207,6 +217,11 @@ class Task:
                           train_loader=train_loader, number_of_samples=number_of_samples)
             sampled_users.append(user)
         logger.warning(f"Sampled users for round {epoch}: {[[user.user_id, user.compromised] for user in sampled_users]} ")
+        
+        self.params.fl_round_participants = [user.user_id for user in sampled_users]
+        total_samples = sum([user.number_of_samples for user in sampled_users])
+        self.params.fl_weight_contribution = [user.number_of_samples / total_samples for user in sampled_users]
+        
         return sampled_users
 
     def check_user_compromised(self, epoch, pos, user_id):
@@ -273,8 +288,10 @@ class Task:
                 continue
             # scale = self.params.fl_eta / self.params.fl_total_participants
             # TODO: change this based on number of sample of each user
-            scale = self.params.fl_eta / self.params.fl_no_models
-            average_update = scale * sum_update
+            # scale = 1 self.params.fl_eta / self.params.fl_no_models
+            # scale = 1.0
+            # average_update = scale * sum_update
+            average_update = sum_update
             model_weight = global_model.state_dict()[name]
             model_weight.add_(average_update)
 

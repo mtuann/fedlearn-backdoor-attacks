@@ -57,9 +57,9 @@ class PatternSynthesizer(Synthesizer):
 
         full_image[:, x_top:x_bot, y_top:y_bot] = pattern_tensor
         # full image has a pixel value of -10 except for the backdoor (pattern_tensor) size: 5 * 3
-        self.mask = 1 * (full_image != self.mask_value).to(self.params.device)
+        self.mask = 1 * (full_image != self.mask_value).to(self.params.device) # (0, 1)
         # mask is a tensor of 0 and 1, 0 for -10 and 1 for other values
-        self.pattern = self.task.normalize(full_image).to(self.params.device)
+        self.pattern = self.task.normalize(full_image).to(self.params.device) # )(-52.5678, 2.7537)
         # backdoor pattern has a ->- shape
         # patter
         ### 1 1 1
@@ -69,8 +69,8 @@ class PatternSynthesizer(Synthesizer):
         ### 1 1 1
         # if pattern_tensor size is (11, 7) = (5, 3) * resize; then pattern size is square of 11 * 11
         
-        import IPython; IPython.embed()
-        exit(0)
+        # import IPython; IPython.embed()
+        # exit(0)
         
     def synthesize_inputs(self, batch, attack_portion=None):
         pattern, mask = self.get_pattern()

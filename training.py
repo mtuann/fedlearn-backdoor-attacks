@@ -3,6 +3,7 @@ import yaml
 from helper import Helper
 from datetime import datetime
 from tqdm import tqdm
+import wandb
 
 from utils.utils import *
 logger = logging.getLogger('logger')
@@ -10,15 +11,19 @@ logger = logging.getLogger('logger')
 def train(hlpr: Helper, epoch, model, optimizer, train_loader, attack=False, global_model=None):
     criterion = hlpr.task.criterion
     model.train()
-    for i, data in tqdm(enumerate(train_loader)):
+    # for i, data in tqdm(enumerate(train_loader)):
+    for i, data in enumerate(train_loader):
         batch = hlpr.task.get_batch(i, data)
         model.zero_grad()
         loss = hlpr.attack.compute_blind_loss(model, criterion, batch, attack, global_model)
         loss.backward()
         optimizer.step()
+        # print(f"Epoch {epoch} batch {i} loss {loss.item()}")
 
         if i == hlpr.params.max_batch_id:
             break
+    # metric = hlpr.task.report_metrics(epoch,
+    #                          prefix=f'Backdoor {str(backdoor):5s}. Epoch: ')
     return
 
 def test(hlpr: Helper, epoch, backdoor=False, model=None):
@@ -44,11 +49,11 @@ def run_fl_round(hlpr: Helper, epoch):
     global_model = hlpr.task.model
     local_model = hlpr.task.local_model
     round_participants = hlpr.task.sample_users_for_round(epoch)
-    hlpr.params.fl_round_participants = [user.user_id for user in round_participants]
+    # hlpr.params.fl_round_participants = [user.user_id for user in round_participants]
     
     weight_accumulator = hlpr.task.get_empty_accumulator()
     
-    logger.info(f"Round epoch {epoch} with participants: {[user.user_id for user in round_participants]}")
+    logger.info(f"Round epoch {epoch} with participants: {[user.user_id for user in round_participants]} and weight: {hlpr.params.fl_weight_contribution}")
     # log number of sample per user
     logger.info(f"Round epoch {epoch} with participants sample size: {[user.number_of_samples for user in round_participants]}")
     
@@ -59,13 +64,13 @@ def run_fl_round(hlpr: Helper, epoch):
             # if not user.user_id == 0:
             #     continue
             
-            print(f"Compromised user: {user.user_id} in run_fl_round {epoch}")
-            for local_epoch in tqdm(range(hlpr.params.fl_local_epochs)): # fl_poison_epochs)):
+            logger.warning(f"Compromised user: {user.user_id} in run_fl_round {epoch}")
+            for local_epoch in tqdm(range(hlpr.params.fl_poison_epochs)): # fl_poison_epochs)):
                 train(hlpr, local_epoch, local_model, optimizer,
                         user.train_loader, attack=True, global_model=global_model)
                 
         else:
-            print(f"Non-compromised user: {user.user_id} in run_fl_round {epoch}")
+            logger.warning(f"Non-compromised user: {user.user_id} in run_fl_round {epoch}")
             for local_epoch in range(hlpr.params.fl_local_epochs):
                 train(hlpr, local_epoch, local_model, optimizer,
                         user.train_loader, attack=False)
@@ -73,6 +78,7 @@ def run_fl_round(hlpr: Helper, epoch):
         local_update = hlpr.attack.get_fl_update(local_model, global_model)
         
         hlpr.save_update(model=local_update, userID=user.user_id)
+        
         if user.compromised:
             hlpr.attack.perform_attack(global_model, user, epoch)
             # hlpr.attack.local_dataset = deepcopy(user.train_loader)
@@ -93,7 +99,18 @@ def run(hlpr: Helper):
         logger.info(f"Communication round {epoch}")
         run_fl_round(hlpr, epoch)
         metric = test(hlpr, epoch, backdoor=False)
-        logger.info(f"Epoch {epoch} main metric: {metric}")
+        main_metric = hlpr.task.get_metrics()
+        
+        # logger.info(f"Epoch {epoch} main metric: {metric}")
+        metric_bd = test(hlpr, epoch, backdoor=True)
+        backdoor_metric = hlpr.task.get_metrics()
+        # wandb.log({"main_metric": metric, "backdoor_metric": metric_bd})
+        
+        
+        wandb.log({'main_acc': main_metric['accuracy'], 'main_loss': main_metric['loss'], 
+                  'backdoor_acc': backdoor_metric['accuracy'], 'backdoor_loss': backdoor_metric['loss']}, 
+                  step=epoch)
+        # logger.info(f"Epoch {epoch} backdoor metric: {metric}")
         # exit(0)
         # hlpr.record_accuracy(metric, test(hlpr, epoch, backdoor=True), epoch)
 
@@ -119,6 +136,7 @@ if __name__ == '__main__':
     # logger = create_logger()
     
     # logger.info(create_table(params))
+    wandb.init(project="simple-backdoor-fl", entity="mtuann", name="cifar10-10-5-2")
     
     
     try:
