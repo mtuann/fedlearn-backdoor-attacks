@@ -58,11 +58,11 @@ def run_fl_round(hlpr: Helper, epoch):
         if user.compromised:
             # if not user.user_id == 0:
             #     continue
+            
             print(f"Compromised user: {user.user_id} in run_fl_round {epoch}")
             for local_epoch in tqdm(range(hlpr.params.fl_local_epochs)): # fl_poison_epochs)):
                 train(hlpr, local_epoch, local_model, optimizer,
-                        user.train_loader, attack=False)
-                        # =True, global_model=global_model)
+                        user.train_loader, attack=True, global_model=global_model)
         else:
             print(f"Non-compromised user: {user.user_id} in run_fl_round {epoch}")
             for local_epoch in range(hlpr.params.fl_local_epochs):
@@ -71,13 +71,15 @@ def run_fl_round(hlpr: Helper, epoch):
         
         local_update = hlpr.attack.get_fl_update(local_model, global_model)
         hlpr.save_update(model=local_update, userID=user.user_id)
-        # if user.compromised:
-        #     hlpr.attack.local_dataset = deepcopy(user.train_loader)
+        if user.compromised:
+            hlpr.attack.perform_attack(global_model, epoch)
+            # hlpr.attack.local_dataset = deepcopy(user.train_loader)
+            
     # logger.info(f"Round {epoch} attack")
     # hlpr.attack.perform_attack(global_model, epoch)
-    logger.info(f"Round {epoch} aggregation")
+    # logger.info(f"Round {epoch} aggregation")
     hlpr.defense.aggr(weight_accumulator, global_model)
-    logger.info(f"Round {epoch} update global model")
+    # logger.info(f"Round {epoch} update global model")
     hlpr.task.update_global_model(weight_accumulator, global_model)
 
 def run(hlpr: Helper):

@@ -154,7 +154,7 @@ class Helper:
         os.makedirs(folderpath, exist_ok=True)
         update_name = '{0}/update_{1}.pth'.format(folderpath, userID)
         torch.save(model, update_name)
-        logger.info(f"Saving update to {update_name}.")
+        # logger.info(f"Saving update to {update_name}.")
 
     def remove_update(self):
         for i in range(self.params.fl_total_participants):

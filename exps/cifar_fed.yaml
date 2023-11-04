@@ -34,13 +34,13 @@ fl_eta: 1 # 0.8
 fl_sample_dirichlet: True
 fl_dirichlet_alpha: 0.9
 
-fl_number_of_adversaries: 20
+fl_number_of_adversaries: 0
 fl_weight_scale: 5
 fl_adv_group_size: 5
 # fl_single_epoch_attack: 200
 
-attack: ThrDFed
-defense: 'FLDetector'
+attack: ModelReplace
+defense: 'FedAvg'
 fl_num_neurons: 5
 noise_mask_alpha: 0 # 0.5
 lagrange_step: 0.1
