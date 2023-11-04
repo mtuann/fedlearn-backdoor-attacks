@@ -113,15 +113,15 @@ Types of Attacks in FL setting:
 ## Other Resources for Backdoor Attack in ML/ FL
 - [List of papers on data poisoning and backdoor attacks](https://github.com/penghui-yang/awesome-data-poisoning-and-backdoor-attacks)
 - [Proceedings of Machine Learning Research](https://proceedings.mlr.press/)
-- [Backdoor learning resources](https://github.com/THUYimingLi/backdoor-learning-resources.git)
+- [Backdoor learning resources](https://github.com/THUYimingLi/backdoor-learning-resources)
 
 # Backdoor Attack code resources in FL
 In FL community, there are many code resources for backdoor attack, in which each of them has its own FL scenario (e.g., hyperparameters, dataset, attack methods, defense methods, etc.).
 Thus, we provide a list of popular code resources for backdoor attack in FL as follows:
 - [Attack of the Tails: Yes, You Really Can Backdoor Federated Learning - NeurIPS'20](https://github.com/ksreenivasan/OOD_Federated_Learning)
-- [DBA: Distributed Backdoor Attacks against Federated Learning ICLR'20](https://github.com/AI-secure/DBA.git)
-- [How To Backdoor Federated Learning - AISTATS'20](https://github.com/ebagdasa/backdoors101.git)
-- [Learning to Backdoor Federated Learning - ICLR 2023 Workshop](https://github.com/HengerLi/RLBackdoorFL/tree/main)
+- [DBA: Distributed Backdoor Attacks against Federated Learning ICLR'20](https://github.com/AI-secure/DBA)
+- [How To Backdoor Federated Learning - AISTATS'20](https://github.com/ebagdasa/backdoors101)
+- [Learning to Backdoor Federated Learning - ICLR'23 Workshop](https://github.com/HengerLi/RLBackdoorFL/tree/main)
 - [Chameleon: Adapting to Peer Images for Planting Durable Backdoors in Federated Learning - ICML'23](https://github.com/ybdai7/Chameleon-durable-backdoor)
 - [FedMLSecurity: A Benchmark for Attacks and Defenses in Federated Learning and Federated LLMs - arXiv'23](https://github.com/FedML-AI/FedML/blob/master/python/fedml/core/security/readme.md)
 - [IBA: Towards Irreversible Backdoor Attacks in Federated Learning - NeurIPS'23](https://github.com/sail-research/iba)

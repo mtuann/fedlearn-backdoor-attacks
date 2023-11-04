@@ -26,7 +26,7 @@ log: True
 transform_train: True
 
 fl: True
-fl_no_models: 100
+fl_no_models: 5
 fl_local_epochs: 2
 fl_poison_epochs: 15
 fl_total_participants: 100

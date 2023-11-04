@@ -75,7 +75,7 @@ class Params:
     fl_no_models: int = 100
     fl_local_epochs: int = 2
     fl_poison_epochs: int = None
-    fl_total_participants: int = 80000
+    fl_total_participants: int = 200
     fl_eta: int = 1
     fl_sample_dirichlet: bool = False
     fl_dirichlet_alpha: float = None
@@ -84,7 +84,8 @@ class Params:
     fl_number_of_adversaries: int = 0
     fl_single_epoch_attack: int = None
     fl_weight_scale: int = 1
-
+    fl_round_participants: List[int] = None
+    
     attack: str = None #'ThrDFed' (3DFed), 'ModelRplace' (Model Replacement)
     
     #"Foolsgold", "FLAME", "RFLBAT", "Deepsight", "FLDetector"

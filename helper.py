@@ -9,10 +9,10 @@ import numpy as np
 import torch
 import yaml
 
-# from attacks.attack import Attack
+from attacks.attack import Attack
 # from defenses.fedavg import FedAvg as Defense
-# from synthesizers.synthesizer import Synthesizer
-# from tasks.task import Task
+from synthesizers.synthesizer import Synthesizer
+from tasks.task import Task
 from utils.parameters import Params
 from utils.utils import create_logger
 import pandas as pd
@@ -21,10 +21,10 @@ logger = logging.getLogger('logger')
 
 class Helper:
     params: Params = None
-    # task: Task = None
-    # synthesizer: Synthesizer = None
+    task: Task = None
+    synthesizer: Synthesizer = None
     # defense: Defense = None
-    # attack: Attack = None
+    attack: Attack = None
 
     def __init__(self, params):
         
@@ -39,16 +39,16 @@ class Helper:
         
         self.make_task()
         
-        # self.make_synthesizer()
+        self.make_synthesizer()
         
-        # self.make_attack()
+        self.make_attack()
         
-        # self.make_defense()
+        self.make_defense()
         
-        # self.accuracy = [[],[]]
+        self.accuracy = [[],[]]
         
-        # self.best_loss = float('inf')
-        # exit(0)
+        self.best_loss = float('inf')
+
     def make_task(self):
         name_lower = self.params.task.lower()
         name_cap = self.params.task
@@ -69,7 +69,7 @@ class Helper:
         name_lower = self.params.synthesizer.lower()
         name_cap = self.params.synthesizer
         module_name = f'synthesizers.{name_lower}_synthesizer'
-        # logger.info(f'make synthesizer: {module_name} name_cap: {name_cap}')
+        logger.info(f'make synthesizer: {module_name} name_cap: {name_cap}')
         try:
             synthesizer_module = importlib.import_module(module_name)
             task_class = getattr(synthesizer_module, f'{name_cap}Synthesizer')
@@ -145,10 +145,16 @@ class Helper:
 
     def save_update(self, model=None, userID = 0):
         folderpath = '{0}/saved_updates'.format(self.params.folder_path)
-        if not os.path.exists(folderpath):
-            os.makedirs(folderpath)
+        # logger.info(f"Saving update to {folderpath}.")
+        
+        # if not os.path.exists(folderpath):
+        #     os.makedirs(folderpath)]
+        # import IPython; IPython.embed()
+        # exit(0)
+        os.makedirs(folderpath, exist_ok=True)
         update_name = '{0}/update_{1}.pth'.format(folderpath, userID)
         torch.save(model, update_name)
+        logger.info(f"Saving update to {update_name}.")
 
     def remove_update(self):
         for i in range(self.params.fl_total_participants):

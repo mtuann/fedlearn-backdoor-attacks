@@ -258,7 +258,9 @@ class Task:
         for name, sum_update in weight_accumulator.items():
             if self.check_ignored_weights(name):
                 continue
-            scale = self.params.fl_eta / self.params.fl_total_participants
+            # scale = self.params.fl_eta / self.params.fl_total_participants
+            # TODO: change this based on number of sample of each user
+            scale = self.params.fl_eta / self.params.fl_no_models
             average_update = scale * sum_update
             model_weight = global_model.state_dict()[name]
             model_weight.add_(average_update)
