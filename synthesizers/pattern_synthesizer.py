@@ -69,8 +69,8 @@ class PatternSynthesizer(Synthesizer):
         ### 1 1 1
         # if pattern_tensor size is (11, 7) = (5, 3) * resize; then pattern size is square of 11 * 11
         
-        # import IPython; IPython.embed()
-        # exit(0)
+        import IPython; IPython.embed()
+        exit(0)
         
     def synthesize_inputs(self, batch, attack_portion=None):
         pattern, mask = self.get_pattern()

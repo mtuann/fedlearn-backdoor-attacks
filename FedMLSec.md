@@ -112,6 +112,17 @@ Intotal: N (num_nets) clients, K (part_nets_per_round) clients are participating
 ```
 For more details, check `FedML` [dataset](https://github.com/FedML-AI/FedML/tree/master/python/fedml/data/edge_case_examples)
 
+### [How To Backdoor Federated Learning (AISTATS'20)](https://github.com/ebagdasa/backdoors101)
+- Generate trigger in file `synthesizers/pattern_synthesizer.py`. The 2 images below are the pattern of the trigger and image with trigger.
+<!-- ![Alt text](uploaded-figures/Figure_full-image-pattern.png)
+![Alt text](uploaded-figures/Figure_4_ba_norm.png) -->
+
+<div style="display:flex">
+    <img src="uploaded-figures/Figure_full-image-pattern.png" 
+        alt="Trigger" width="400"/>
+    <img src="uploaded-figures/Figure_4_ba_norm.png" 
+    alt="Image 2" width="400"/>
+</div>
 
 ## TODO:
 - [ ] Setting standard FL attack from Attack of the Tails and DBA

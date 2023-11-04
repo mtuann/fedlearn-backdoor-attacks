@@ -48,9 +48,9 @@ def run_fl_round(hlpr: Helper, epoch):
     
     weight_accumulator = hlpr.task.get_empty_accumulator()
     
-    logger.info(f"Round {epoch} participants: {[user.user_id for user in round_participants]}")
+    logger.info(f"Round epoch {epoch} with participants: {[user.user_id for user in round_participants]}")
     # log number of sample per user
-    logger.info(f"Round {epoch} participants sample size: {[len(user.train_loader.dataset) for user in round_participants]}")
+    logger.info(f"Round epoch {epoch} with participants sample size: {[user.number_of_samples for user in round_participants]}")
     
     for user in tqdm(round_participants):
         hlpr.task.copy_params(global_model, local_model)
@@ -63,6 +63,7 @@ def run_fl_round(hlpr: Helper, epoch):
             for local_epoch in tqdm(range(hlpr.params.fl_local_epochs)): # fl_poison_epochs)):
                 train(hlpr, local_epoch, local_model, optimizer,
                         user.train_loader, attack=True, global_model=global_model)
+                
         else:
             print(f"Non-compromised user: {user.user_id} in run_fl_round {epoch}")
             for local_epoch in range(hlpr.params.fl_local_epochs):
@@ -70,9 +71,10 @@ def run_fl_round(hlpr: Helper, epoch):
                         user.train_loader, attack=False)
         
         local_update = hlpr.attack.get_fl_update(local_model, global_model)
+        
         hlpr.save_update(model=local_update, userID=user.user_id)
         if user.compromised:
-            hlpr.attack.perform_attack(global_model, epoch)
+            hlpr.attack.perform_attack(global_model, user, epoch)
             # hlpr.attack.local_dataset = deepcopy(user.train_loader)
             
     # logger.info(f"Round {epoch} attack")
@@ -116,7 +118,7 @@ if __name__ == '__main__':
     
     # logger = create_logger()
     
-    logger.info(create_table(params))
+    # logger.info(create_table(params))
     
     
     try:

@@ -25,8 +25,38 @@ class Synthesizer:
 
         backdoored_batch = batch.clone()
         self.apply_backdoor(backdoored_batch, attack_portion)
-
         return backdoored_batch
+    
+        ### Plot the backdoored image and the original image
+        # import IPython; IPython.embed(); exit(0)
+        # batch.inputs.shape = (batch_size, 3, 32, 32) = (64, 3,  32, 32)
+        # using torch to show the image
+        # import matplotlib.pyplot as plt
+        # import numpy as np
+        # import torchvision
+        # import torchvision.transforms as transforms
+        # def imshow(img):
+        #     # img to cpu
+        #     img = img.cpu()
+        #     # img = img / 2 + 0.5     # unnormalize
+        #     npimg = img.numpy()
+        #     plt.imshow(np.transpose(npimg, (1, 2, 0)))
+        #     plt.show()
+            
+        # def imshow2(img):
+        #     # img to cpu
+        #     img = img.cpu()
+        #     img = img / 2 + 0.5     # unnormalize
+        #     npimg = img.numpy()
+        #     plt.imshow(np.transpose(npimg, (1, 2, 0)))
+        #     plt.show()
+            
+            
+        # imshow(torchvision.utils.make_grid(batch.inputs))
+        # imshow(torchvision.utils.make_grid(backdoored_batch.inputs))
+        # import IPython; IPython.embed(); exit(0)
+        
+        
 
     def apply_backdoor(self, batch, attack_portion):
         """

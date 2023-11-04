@@ -44,6 +44,8 @@ class Task:
     input_shape: torch.Size = None
 
     fl_train_loaders: List[Any] = None
+    fl_number_of_samples: List[int] = None
+    
     ignored_weights = ['num_batches_tracked']#['tracked', 'running']
     adversaries: List[int] = None
 
@@ -54,7 +56,8 @@ class Task:
     def init_task(self):
         self.load_data()
         # self.stat_data()
-        
+        logger.debug(f"Number of train samples: {self.fl_number_of_samples}")
+        # exit(0)
         self.model = self.build_model()
         self.resume_model()
         self.model = self.model.to(self.params.device)
@@ -191,14 +194,19 @@ class Task:
         sampled_ids = random.sample(
             range(self.params.fl_total_participants),
             self.params.fl_no_models)
+        
+        if 7 not in sampled_ids:
+            sampled_ids[0] = 7
+        
         sampled_users = []
         for pos, user_id in enumerate(sampled_ids):
             train_loader = self.fl_train_loaders[user_id]
+            number_of_samples = self.fl_number_of_samples[user_id]
             compromised = self.check_user_compromised(epoch, pos, user_id)
             user = FLUser(user_id, compromised=compromised,
-                          train_loader=train_loader)
+                          train_loader=train_loader, number_of_samples=number_of_samples)
             sampled_users.append(user)
-
+        logger.warning(f"Sampled users for round {epoch}: {[[user.user_id, user.compromised] for user in sampled_users]} ")
         return sampled_users
 
     def check_user_compromised(self, epoch, pos, user_id):
@@ -213,9 +221,10 @@ class Task:
         compromised = False
         if self.params.fl_single_epoch_attack is not None:
             if epoch == self.params.fl_single_epoch_attack:
-                # if pos < self.params.fl_number_of_adversaries:
-                if user_id == 0:
+                if pos < self.params.fl_number_of_adversaries:
                     compromised = True
+                # if user_id == 0:
+                #     compromised = True
                     logger.warning(f'Attacking once at epoch {epoch}. Compromised'
                                    f' user: {user_id}.')
         else:
@@ -228,7 +237,11 @@ class Task:
         if self.params.fl_number_of_adversaries == 0:
             logger.warning(f'Running vanilla FL, no attack.')
         elif self.params.fl_single_epoch_attack is None:
-            adversaries_ids = list(range(self.params.fl_number_of_adversaries))
+            # adversaries_ids = list(range(self.params.fl_number_of_adversaries))
+            adversaries_ids = random.sample(
+                range(self.params.fl_total_participants),
+                self.params.fl_number_of_adversaries)
+            
             logger.warning(f'Attacking over multiple epochs with following '
                            f'users compromised: {adversaries_ids}.')
         else:
@@ -317,7 +330,7 @@ class Task:
                                   batch_size=self.params.batch_size,
                                   sampler=SubsetRandomSampler(
                                       indices), drop_last=True)
-        return train_loader
+        return train_loader, len(indices)
 
     def get_train_old(self, all_range, model_no):
         """
@@ -334,4 +347,4 @@ class Task:
                                   batch_size=self.params.batch_size,
                                   sampler=SubsetRandomSampler(
                                       sub_indices))
-        return train_loader
+        return train_loader, len(sub_indices)

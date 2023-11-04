@@ -71,3 +71,17 @@ logger.critical("This is a critical message")
 
 
 # write logger to html file
+import numpy as np
+from PIL import Image
+from torchvision import transforms
+trans = transforms.Compose([transforms.ToTensor()])
+img = np.random.randint(0, 255, size=(3, 224, 224), dtype=np.uint8)
+
+demo_img = trans(img)
+
+demo_array = np.moveaxis(demo_img.numpy()*255, 0, -1)
+print(Image.fromarray(demo_array.astype(np.uint8)))
+
+from matplotlib import pyplot as plt
+plt.imshow(img)
+plt.show()

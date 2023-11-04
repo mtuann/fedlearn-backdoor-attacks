@@ -17,16 +17,20 @@ class Cifar10Task(Task):
 
     def load_data(self):
         self.load_cifar_data()
+        number_of_samples = []
+        
         if self.params.fl_sample_dirichlet:
             # sample indices for participants using Dirichlet distribution
-            split = min(self.params.fl_total_participants / 100, 1)
+            split = min(self.params.fl_total_participants / 10, 1)
             all_range = list(range(int(len(self.train_dataset) * split)))
             self.train_dataset = Subset(self.train_dataset, all_range)
             indices_per_participant = self.sample_dirichlet_train_data(
                 self.params.fl_total_participants,
                 alpha=self.params.fl_dirichlet_alpha)
-            train_loaders = [self.get_train(indices) for pos, indices in
-                             indices_per_participant.items()]
+            train_loaders, number_of_samples = zip(*[self.get_train(indices) for pos, indices in
+                            indices_per_participant.items()])
+            # print("number_of_samples", number_of_samples)
+            
         else:
             # sample indices for participants that are equally
             # split to 500 images per participant
@@ -34,13 +38,18 @@ class Cifar10Task(Task):
             all_range = list(range(int(len(self.train_dataset) * split)))
             self.train_dataset = Subset(self.train_dataset, all_range)
             random.shuffle(all_range)
-            train_loaders = [self.get_train_old(all_range, pos)
-                             for pos in
-                             range(self.params.fl_total_participants)]
+            
+            train_loaders, number_of_samples = zip(*[self.get_train_old(all_range, pos)
+                            for pos in range(self.params.fl_total_participants)])
+            
         self.fl_train_loaders = train_loaders
-        return
+        self.fl_number_of_samples = number_of_samples
+        # print("fl_number_of_samples", self.fl_number_of_samples)
+        
 
     def load_cifar_data(self):
+        # print(f"Loading CIFAR10 data: {self.params.transform_train}")
+        # exit(0)
         if self.params.transform_train:
             transform_train = transforms.Compose([
                 transforms.RandomCrop(32, padding=4),
