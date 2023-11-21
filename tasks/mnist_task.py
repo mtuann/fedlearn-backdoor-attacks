@@ -25,19 +25,23 @@ class MNISTTask(Task):
                 self.params.fl_total_participants,
                 alpha=self.params.fl_dirichlet_alpha)
             
-            train_loaders = [self.get_train(indices) for pos, indices in
-                             indices_per_participant.items()]
+            # train_loaders = [self.get_train(indices) for pos, indices in
+            #                  indices_per_participant.items()]
+            
+            train_loaders, number_of_samples = zip(*[self.get_train(indices) for pos, indices in
+                            indices_per_participant.items()])
+            
         else:
             # sample indices for participants that are equally
             split = min(self.params.fl_total_participants / 20, 1)
             all_range = list(range(int(len(self.train_dataset) * split)))
             self.train_dataset = Subset(self.train_dataset, all_range)
             random.shuffle(all_range)
-            train_loaders = [self.get_train_old(all_range, pos)
-                             for pos in
-                             range(self.params.fl_total_participants)]
-       
+            train_loaders, number_of_samples = zip(*[self.get_train_old(all_range, pos)
+                            for pos in range(self.params.fl_total_participants)])
+            
         self.fl_train_loaders = train_loaders
+        self.fl_number_of_samples = number_of_samples
         logger.info(f"Done splitting with #participant: {self.params.fl_total_participants}")
         return
     

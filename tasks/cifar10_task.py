@@ -5,7 +5,7 @@ from torch.utils.data import DataLoader
 from torch.utils.data import Subset
 from torchvision.transforms import transforms
 
-from models.resnet import resnet18
+# from models.resnet import resnet18
 from models.resnet_cifar import ResNet18
 
 from tasks.task import Task
@@ -90,7 +90,7 @@ class Cifar10Task(Task):
         return True
 
     def build_model(self) -> nn.Module:
-        model = resnet18(pretrained=False,
-                        num_classes=len(self.classes))
-        
+        # model = resnet18(pretrained=False,
+        #                 num_classes=len(self.classes))
+        model = ResNet18()
         return model

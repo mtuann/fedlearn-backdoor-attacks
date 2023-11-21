@@ -121,11 +121,20 @@ class Task:
 
     def resume_model(self):
         if self.params.resume_model:
+            # import IPython; IPython.embed()
             logger.info(f'Resuming training from {self.params.resume_model}')
             loaded_params = torch.load(f"{self.params.resume_model}",
                                     map_location=torch.device('cpu'))
             self.model.load_state_dict(loaded_params['state_dict'])
             self.params.start_epoch = loaded_params['epoch']
+            # print self.model architechture to file 'model.txt'
+            # with open(f'model.txt', 'w') as f:
+            #     f.write(str(self.model))
+            
+            # # print architecture of loaded_params
+            # with open(f'loaded_params.txt', 'w') as f:
+            #     f.write(str(loaded_params['state_dict'].keys()))
+            
             # self.params.lr = loaded_params.get('lr', self.params.lr)
 
             logger.warning(f"Loaded parameters from saved model: LR is"
@@ -213,6 +222,7 @@ class Task:
             train_loader = self.fl_train_loaders[user_id]
             number_of_samples = self.fl_number_of_samples[user_id]
             compromised = self.check_user_compromised(epoch, pos, user_id)
+
             user = FLUser(user_id, compromised=compromised,
                           train_loader=train_loader, number_of_samples=number_of_samples)
             sampled_users.append(user)

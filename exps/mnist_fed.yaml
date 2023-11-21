@@ -2,15 +2,15 @@ task: MNIST
 synthesizer: Pattern
 
 random_seed: 42
-batch_size: 64
-test_batch_size: 100
-lr: 0.1
+batch_size: 256
+test_batch_size: 512
+lr: 0.01
 momentum: 0.9
 decay: 0.0005
-epochs: 30
-poison_epoch: 10
-poison_epoch_stop: 100
-save_on_epochs: # [10, 20, 30, 40, 50]
+epochs: 1500
+poison_epoch: 0
+poison_epoch_stop: 1500
+save_on_epochs: [] # [10, 20, 30, 40, 50]
 optimizer: SGD
 log_interval: 100
 
@@ -19,20 +19,20 @@ backdoor_label: 8
 
 # resume_model: saved_models/mnist_pretrain/model_last.pt.tar.epoch_10
 
-save_model: False
+save_model: True
 log: True
 report_train_loss: False
 
 transform_train: True
 
 fl: True
-fl_no_models: 2
-fl_local_epochs: 1
-fl_poison_epochs: 15
-fl_total_participants: 20
+fl_no_models: 10
+fl_local_epochs: 2
+fl_poison_epochs: 5
+fl_total_participants: 100
 fl_eta: 1
-fl_sample_dirichlet: False
-fl_dirichlet_alpha: 0.9
+fl_sample_dirichlet: True
+fl_dirichlet_alpha: 0.5
 
 fl_number_of_adversaries: 4
 fl_weight_scale: 5

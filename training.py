@@ -104,14 +104,13 @@ def run(hlpr: Helper):
         # logger.info(f"Epoch {epoch} main metric: {metric}")
         metric_bd = test(hlpr, epoch, backdoor=True)
         backdoor_metric = hlpr.task.get_metrics()
-        # wandb.log({"main_metric": metric, "backdoor_metric": metric_bd})
         
         
         wandb.log({'main_acc': main_metric['accuracy'], 'main_loss': main_metric['loss'], 
                   'backdoor_acc': backdoor_metric['accuracy'], 'backdoor_loss': backdoor_metric['loss']}, 
                   step=epoch)
-        # logger.info(f"Epoch {epoch} backdoor metric: {metric}")
-        # exit(0)
+        logger.info(f"Epoch {epoch} backdoor metric: {metric}")
+        
         # hlpr.record_accuracy(metric, test(hlpr, epoch, backdoor=True), epoch)
 
         hlpr.save_model(hlpr.task.model, epoch, metric)
@@ -134,10 +133,14 @@ if __name__ == '__main__':
     helper = Helper(params)
     
     # logger = create_logger()
-    
+    # - Exp 01: fl_total_participants/ fl_no_models/ fl_number_of_adversaries: 200/ 20/ 4; fl_dirichlet_alpha: 0.5; lr: 0.02
+    # - Exp 02: fl_total_participants/ fl_no_models/ fl_number_of_adversaries: 200/ 10/ 4; fl_dirichlet_alpha: 0.5; lr: 0.02
+    # - Exp 03: fl_total_participants/ fl_no_models/ fl_number_of_adversaries: 100/ 10/ 4; fl_dirichlet_alpha: 0.5; lr: 0.02
+    # - Exp 04: fl_total_participants/ fl_no_models/ fl_number_of_adversaries: 100/ 10/ 4; fl_dirichlet_alpha: 0.5; lr: 0.01
+    # - Exp 05: fl_total_participants/ fl_no_models/ fl_number_of_adversaries: 100/ 10/ 4; fl_dirichlet_alpha: 0.5; lr: 0.05
+
     # logger.info(create_table(params))
-    wandb.init(project="simple-backdoor-fl", entity="mtuann", name="cifar10-10-5-2")
-    
+    wandb.init(project="simple-backdoor-fl", entity="mtuann", name=f"{params['name']}-{params['current_time']}-{params['fl_total_participants']}-{params['fl_no_models']}-{params['fl_number_of_adversaries']}-{params['fl_dirichlet_alpha']}-{params['lr']}")
     
     try:
         run(helper)

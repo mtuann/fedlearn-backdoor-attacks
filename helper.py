@@ -135,6 +135,7 @@ class Helper:
                           'lr': self.params.lr,
                           'params_dict': self.params.to_dict()}
             self.save_checkpoint(saved_dict, False, model_name)
+            
             if epoch in self.params.save_on_epochs:
                 logger.info(f'Saving model on epoch {epoch}')
                 self.save_checkpoint(saved_dict, False,
@@ -143,6 +144,7 @@ class Helper:
                 self.save_checkpoint(saved_dict, False, f'{model_name}_best')
                 self.best_loss = val_loss
 
+        logger.info(f"Done saving model to {self.params.folder_path}.")
     def save_update(self, model=None, userID = 0):
         folderpath = '{0}/saved_updates'.format(self.params.folder_path)
         # logger.info(f"Saving update to {folderpath}.")
