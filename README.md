@@ -89,8 +89,7 @@ Types of Attacks in FL setting:
 |A Comprehensive Review of the State-of-the-Art on Security and Privacy Issues in Healthcare|2023|ACM Computing Surveys|||[link](https://dl.acm.org/doi/pdf/10.1145/3571156)||
 |A Comprehensive Survey of Privacy-preserving Federated Learning: A Taxonomy, Review, and Future Directions|2023|ACM Computing Surveys|||[link](https://dl.acm.org/doi/pdf/10.1145/3460427)||
 |Recent Advances on Federated Learning: A Systematic Survey|2023|arXiv|||[link](https://arxiv.org/pdf/2301.01299.pdf)||
-
-
+|Backdoor attacks and defenses in federated learning: Survey, challenges and future research directions|2024|Engineering Applications of Artificial Intelligence|||[link](https://www.sciencedirect.com/science/article/abs/pii/S0952197623013507)||
 
 
 ## Paper Backdoor Attack in ML/ FL
