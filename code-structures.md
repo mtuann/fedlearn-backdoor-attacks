@@ -52,3 +52,5 @@ Perform the following steps for each round:
 1. Define the `synthesizer.py` in the `synthesizers` folder, that inherits from the `Synthesizer` class.
 2. Define the `attack.py` in the `attacks` folder, that inherits from the `Attack` class.
    - Loss functions are defined in the `attacks/losses.py` file.
+3. Define the loss function
+  

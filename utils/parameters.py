@@ -87,6 +87,8 @@ class Params:
     fl_round_participants: List[int] = None
     fl_weight_contribution: List[float] = None
     
+    fl_local_updated_models: List[int] = None
+    
     attack: str = None #'ThrDFed' (3DFed), 'ModelRplace' (Model Replacement)
     
     #"Foolsgold", "FLAME", "RFLBAT", "Deepsight", "FLDetector"

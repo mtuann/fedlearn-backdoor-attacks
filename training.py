@@ -18,6 +18,8 @@ def train(hlpr: Helper, epoch, model, optimizer, train_loader, attack=False, glo
         loss = hlpr.attack.compute_blind_loss(model, criterion, batch, attack, global_model)
         loss.backward()
         optimizer.step()
+        # import IPython; IPython.embed()
+        # exit(0)
         # print(f"Epoch {epoch} batch {i} loss {loss.item()}")
 
         if i == hlpr.params.max_batch_id:
@@ -106,9 +108,9 @@ def run(hlpr: Helper):
         backdoor_metric = hlpr.task.get_metrics()
         
         
-        wandb.log({'main_acc': main_metric['accuracy'], 'main_loss': main_metric['loss'], 
-                  'backdoor_acc': backdoor_metric['accuracy'], 'backdoor_loss': backdoor_metric['loss']}, 
-                  step=epoch)
+        # wandb.log({'main_acc': main_metric['accuracy'], 'main_loss': main_metric['loss'], 
+        #           'backdoor_acc': backdoor_metric['accuracy'], 'backdoor_loss': backdoor_metric['loss']}, 
+        #           step=epoch)
         logger.info(f"Epoch {epoch} backdoor metric: {metric}")
         
         # hlpr.record_accuracy(metric, test(hlpr, epoch, backdoor=True), epoch)
@@ -121,7 +123,8 @@ if __name__ == '__main__':
     parser.add_argument('--params', dest='params', required=True)
     parser.add_argument('--name', dest='name', required=True)
     # python training.py --name mnist --params exps/mnist_fed.yaml
-    
+    # python training.py --name tiny-imagenet-200 --params exps/imagenet_fed.yaml
+    # python training.py --name cifar10 --params exps/cifar_fed.yaml
     args = parser.parse_args()
     print(args)
     with open(args.params) as f:
@@ -139,8 +142,10 @@ if __name__ == '__main__':
     # - Exp 04: fl_total_participants/ fl_no_models/ fl_number_of_adversaries: 100/ 10/ 4; fl_dirichlet_alpha: 0.5; lr: 0.01
     # - Exp 05: fl_total_participants/ fl_no_models/ fl_number_of_adversaries: 100/ 10/ 4; fl_dirichlet_alpha: 0.5; lr: 0.05
 
+    
+    
     # logger.info(create_table(params))
-    wandb.init(project="simple-backdoor-fl", entity="mtuann", name=f"{params['name']}-{params['current_time']}-{params['fl_total_participants']}-{params['fl_no_models']}-{params['fl_number_of_adversaries']}-{params['fl_dirichlet_alpha']}-{params['lr']}")
+    # wandb.init(project="simple-backdoor-fl", entity="mtuann", name=f"{params['name']}-{params['current_time']}-{params['fl_total_participants']}-{params['fl_no_models']}-{params['fl_number_of_adversaries']}-{params['fl_dirichlet_alpha']}-{params['lr']}")
     
     try:
         run(helper)

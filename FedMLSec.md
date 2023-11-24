@@ -125,6 +125,26 @@ For more details, check `FedML` [dataset](https://github.com/FedML-AI/FedML/tree
     alt="Image 2" width="400"/>
 </div>
 
+- Define the loss function in `attacks/loss_function.py`
+Standard version: each malicious client computes 2 losses and weights them equally (0.5, 0.5)
+
+```Python
+    # Criterion: nn.CrossEntropyLoss(reduction='none'); get all losses shape (batch_size)
+    Total loss = 0.5 * (loss1 + loss2); check `scale_losses` in `attacks/attack.py`
+```
+
+- Training in `training.py`
+
+
+```Python
+    - In each communication round, randomly select K clients to participate in the training
+        - selected_attackers from "__attacker_pool" (numpy random choice attacker_pool_size/ num_nets)
+        - selected_benign_clients
+        
+```
+
+
+
 ## TODO:
 - [ ] Setting standard FL attack from Attack of the Tails and DBA
 - [ ] Change dump to file -> dump to memory

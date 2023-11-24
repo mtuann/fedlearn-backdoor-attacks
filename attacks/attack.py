@@ -63,6 +63,8 @@ class Attack:
 
     def scale_losses(self, loss_tasks, loss_values, scale):
         blind_loss = 0
+        # import IPython; IPython.embed()
+        # exit(0)
         for it, t in enumerate(loss_tasks):
             self.params.running_losses[t].append(loss_values[t].item())
             self.params.running_scales[t].append(scale[t])
