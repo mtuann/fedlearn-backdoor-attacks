@@ -51,13 +51,12 @@ def run_fl_round(hlpr: Helper, epoch):
     global_model = hlpr.task.model
     local_model = hlpr.task.local_model
     round_participants = hlpr.task.sample_users_for_round(epoch)
-    # hlpr.params.fl_round_participants = [user.user_id for user in round_participants]
     
     weight_accumulator = hlpr.task.get_empty_accumulator()
     
     logger.info(f"Round epoch {epoch} with participants: {[user.user_id for user in round_participants]} and weight: {hlpr.params.fl_weight_contribution}")
     # log number of sample per user
-    logger.info(f"Round epoch {epoch} with participants sample size: {[user.number_of_samples for user in round_participants]}")
+    logger.info(f"Round epoch {epoch} with participants sample size: {[user.number_of_samples for user in round_participants]} and sum: {sum([user.number_of_samples for user in round_participants])}")
     
     for user in tqdm(round_participants):
         hlpr.task.copy_params(global_model, local_model)
@@ -79,17 +78,17 @@ def run_fl_round(hlpr: Helper, epoch):
         
         local_update = hlpr.attack.get_fl_update(local_model, global_model)
         
-        hlpr.save_update(model=local_update, userID=user.user_id)
+        # hlpr.save_update(model=local_update, userID=user.user_id)
+        # Do not save model to files, save it as a variable
+        hlpr.task.adding_local_updated_model(local_update = local_update, user_id=user.user_id)
         
-        if user.compromised:
-            hlpr.attack.perform_attack(global_model, user, epoch)
-            # hlpr.attack.local_dataset = deepcopy(user.train_loader)
-            
-    # logger.info(f"Round {epoch} attack")
-    # hlpr.attack.perform_attack(global_model, epoch)
-    # logger.info(f"Round {epoch} aggregation")
-    hlpr.defense.aggr(weight_accumulator, global_model)
+        # if user.compromised:
+        #     hlpr.attack.perform_attack(global_model, user, epoch)
+        #     hlpr.attack.local_dataset = deepcopy(user.train_loader)
+    
+    hlpr.defense.aggr(weight_accumulator, global_model, )
     # logger.info(f"Round {epoch} update global model")
+    
     hlpr.task.update_global_model(weight_accumulator, global_model)
 
 def run(hlpr: Helper):
@@ -130,9 +129,11 @@ if __name__ == '__main__':
     with open(args.params) as f:
         params = yaml.load(f, Loader=yaml.FullLoader)
     # print(params)
-    params['current_time'] = datetime.now().strftime('%b.%d_%H.%M.%S')
-    params['name'] = args.name
+    params['name'] = f'{args.name}.{params["fl_total_participants"]}_{params["fl_no_models"]}_{params["fl_number_of_adversaries"]}_{params["fl_dirichlet_alpha"]}'
     
+    params['current_time'] = datetime.now().strftime('%Y.%m.%b_%H.%M.%S')
+    print(params)
+    # exit(0)
     helper = Helper(params)
     
     # logger = create_logger()

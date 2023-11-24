@@ -17,19 +17,28 @@ class FedAvg:
 
     # FedAvg aggregation
     def aggr(self, weight_accumulator, _):
-        logger.info(f"Aggregating {len(self.params.fl_round_participants)} participants")
+        # logger.info(f"Aggregating {len(self.params.fl_weight_contribution.keys())} participants")
         
-        weight_contrib = self.params.fl_weight_contribution
+        # weight_contrib = self.params.fl_weight_contribution
         
-        for idRound, userID in enumerate(self.params.fl_round_participants):
-            updates_name = '{0}/saved_updates/update_{1}.pth'\
-                .format(self.params.folder_path, userID)
-            # logger.info(f"Aggregating participant {userID} path: {updates_name}")
-            
-            loaded_params = torch.load(updates_name)
+        for user_id, weight_contrib_user in self.params.fl_weight_contribution.items():
+            # logger.info(f"Aggregating participant: {user_id} with weight: {weight_contrib_user}")
+            loaded_params = self.params.fl_local_updated_models[user_id]
             self.accumulate_weights(weight_accumulator, \
-                {key:(loaded_params[key] * weight_contrib[idRound] ).to(self.params.device) for \
+                {key:(loaded_params[key] * weight_contrib_user ).to(self.params.device) for \
                     key in loaded_params})
+        
+        # for idRound, userID in enumerate(self.params.fl_round_participants):
+        #     weight_contrib_user = self.params.fl_weight_contribution[userID]
+        #     # updates_name = '{0}/saved_updates/update_{1}.pth'\
+        #     #     .format(self.params.folder_path, userID)
+        #     # # logger.info(f"Aggregating participant {userID} path: {updates_name}")
+            
+        #     # loaded_params = torch.load(updates_name)
+        #     loaded_params = self.params.fl_local_updated_models[userID]
+        #     self.accumulate_weights(weight_accumulator, \
+        #         {key:(loaded_params[key] * weight_contrib_user ).to(self.params.device) for \
+        #             key in loaded_params})
 
     def accumulate_weights(self, weight_accumulator, local_update):
         for name, value in local_update.items():

@@ -84,10 +84,11 @@ class Params:
     fl_number_of_adversaries: int = 0
     fl_single_epoch_attack: int = None
     fl_weight_scale: int = 1
-    fl_round_participants: List[int] = None
-    fl_weight_contribution: List[float] = None
     
-    fl_local_updated_models: List[int] = None
+    fl_round_participants: List[int] = None
+    fl_weight_contribution: Dict[int, float] = None
+    
+    fl_local_updated_models: Dict[int, Dict[str, torch.Tensor]] = None
     
     attack: str = None #'ThrDFed' (3DFed), 'ModelRplace' (Model Replacement)
     
@@ -107,7 +108,7 @@ class Params:
 
         if self.log:
             self.folder_path = f'saved_models/' \
-                               f'{self.task}_{self.current_time}_{self.name}'
+                               f'{self.task}__{self.current_time}__{self.name}'
 
         self.running_losses = defaultdict(list)
         self.running_scales = defaultdict(list)

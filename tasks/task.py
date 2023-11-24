@@ -228,11 +228,17 @@ class Task:
             sampled_users.append(user)
         logger.warning(f"Sampled users for round {epoch}: {[[user.user_id, user.compromised] for user in sampled_users]} ")
         
-        self.params.fl_round_participants = [user.user_id for user in sampled_users]
-        total_samples = sum([user.number_of_samples for user in sampled_users])
-        self.params.fl_weight_contribution = [user.number_of_samples / total_samples for user in sampled_users]
         
+        total_samples = sum([user.number_of_samples for user in sampled_users])
+        
+        self.params.fl_weight_contribution = {user.user_id: user.number_of_samples / total_samples for user in sampled_users}
+        # self.params.fl_round_participants = [user.user_id for user in sampled_users]
+        self.params.fl_local_updated_models = dict()
+        logger.warning(f"Sampled users for round {epoch}: {self.params.fl_weight_contribution} ")
         return sampled_users
+    
+    def adding_local_updated_model(self, local_update: Dict[str, torch.Tensor], epoch=None, user_id=None):
+        self.params.fl_local_updated_models[user_id] = local_update
 
     def check_user_compromised(self, epoch, pos, user_id):
         """Check if the sampled user is compromised for the attack.
@@ -292,7 +298,7 @@ class Task:
                 local_state[name].copy_(param)
 
     def update_global_model(self, weight_accumulator, global_model: Module):
-        self.last_global_model = deepcopy(self.model)
+        # self.last_global_model = deepcopy(self.model)
         for name, sum_update in weight_accumulator.items():
             if self.check_ignored_weights(name):
                 continue
