@@ -111,7 +111,7 @@ Types of Attacks in FL setting:
 ## Paper Backdoor Attack in ML/ FL
 - [How to Backdoor Federated Learning](https://arxiv.org/pdf/1807.00459.pdf)
 - [Attack of the Tails: Yes, You Really Can Backdoor Federated Learning](https://arxiv.org/pdf/2007.05084v1.pdf)
-- [DBA: Distributed Backdoor Attacks against Federated Learning](https://arxiv.org/pdf/2002.08327.pdf)
+- [DBA: Distributed Backdoor Attacks against Federated Learning](https://openreview.net/pdf?id=rkgyS0VFvr)
 
 ## Code for Backdoor Attack in ML/ FL
 <!-- Table for Backdoor Attack in ML/ FL -->
