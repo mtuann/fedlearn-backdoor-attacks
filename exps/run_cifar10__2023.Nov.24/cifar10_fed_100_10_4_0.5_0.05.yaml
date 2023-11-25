@@ -7,9 +7,9 @@ test_batch_size: 512
 lr: 0.05
 momentum: 0.9
 decay: 0.0005
-epochs: 1500
+epochs: 50000
 poison_epoch: 0
-poison_epoch_stop: 1500
+poison_epoch_stop: 50000
 save_on_epochs: [] # [30, 50, 80, 100, 120, 150, 170, 200]
 optimizer: SGD
 log_interval: 100
@@ -18,7 +18,7 @@ poisoning_proportion: 0.5
 backdoor_label: 8
 
 # resume_model:
-resume_model: saved_models/cifar_pretrain/model_last.pt.tar.epoch_200
+# resume_model: saved_models/cifar_pretrain/model_last.pt.tar.epoch_200
 
 save_model: True
 log: True

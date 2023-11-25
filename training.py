@@ -103,7 +103,7 @@ def run(hlpr: Helper):
         main_metric = hlpr.task.get_metrics()
         
         # logger.info(f"Epoch {epoch} main metric: {metric}")
-        # metric_bd = test(hlpr, epoch, backdoor=True)
+        metric_bd = test(hlpr, epoch, backdoor=True)
         backdoor_metric = hlpr.task.get_metrics()
         
         
@@ -135,7 +135,9 @@ if __name__ == '__main__':
     with open(args.params) as f:
         params = yaml.load(f, Loader=yaml.FullLoader)
     # print(params)
-    params['name'] = f'{args.name}.{params["fl_total_participants"]}_{params["fl_no_models"]}_{params["fl_number_of_adversaries"]}_{params["fl_dirichlet_alpha"]}_{params["lr"]}'
+    pretrained_str = 'pretrained' if 'resume_model' in params else 'no_pretrained'
+    
+    params['name'] = f'{args.name}.{params["fl_total_participants"]}_{params["fl_no_models"]}_{params["fl_number_of_adversaries"]}_{params["fl_dirichlet_alpha"]}_{params["lr"]}_{pretrained_str}'
     
     params['current_time'] = datetime.now().strftime('%Y.%b.%d_%H.%M.%S')
     print(params)
