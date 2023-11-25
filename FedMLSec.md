@@ -133,16 +133,7 @@ Standard version: each malicious client computes 2 losses and weights them equal
     Total loss = 0.5 * (loss1 + loss2); check `scale_losses` in `attacks/attack.py`
 ```
 
-- Training in `training.py`
-
-
-```Python
-    - In each communication round, randomly select K clients to participate in the training
-        - selected_attackers from "__attacker_pool" (numpy random choice attacker_pool_size/ num_nets)
-        - selected_benign_clients
-        
-```
-
+The result of the experiment can be found in this [wandb](https://wandb.ai/mtuann/benchmark-backdoor-fl?workspace=user-mtuann).
 
 
 ## TODO:

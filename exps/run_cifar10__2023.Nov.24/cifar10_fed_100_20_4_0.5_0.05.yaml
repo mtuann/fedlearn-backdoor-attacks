@@ -1,49 +1,47 @@
-task: Imagenet
+task: Cifar10
 synthesizer: Pattern
-
-data_path: .data/tiny-imagenet-200
 
 random_seed: 42
 batch_size: 256
 test_batch_size: 512
-lr: 0.001
+lr: 0.05
 momentum: 0.9
 decay: 0.0005
 epochs: 1500
 poison_epoch: 0
 poison_epoch_stop: 1500
-save_on_epochs: [] # [10, 20, 30, 40, 50]
+save_on_epochs: [] # [30, 50, 80, 100, 120, 150, 170, 200]
 optimizer: SGD
 log_interval: 100
 
-poisoning_proportion: 0.3
+poisoning_proportion: 0.5
 backdoor_label: 8
 
-resume_model: saved_models/tiny_64_pretrain/tiny-resnet.epoch_20
+# resume_model:
+resume_model: saved_models/cifar_pretrain/model_last.pt.tar.epoch_200
 
 save_model: True
 log: True
-report_train_loss: False
 
 transform_train: True
 
 fl: True
-fl_no_models: 10
-fl_local_epochs: 2
-fl_poison_epochs: 10
 fl_total_participants: 100
-fl_eta: 1
+fl_no_models: 20
+fl_local_epochs: 2
+fl_poison_epochs: 5
+# fl_poison_epochs: 15
+fl_eta: 1 # 0.8`3
 fl_sample_dirichlet: True
 fl_dirichlet_alpha: 0.5
 
 fl_number_of_adversaries: 4
-# fl_number_of_scapegoats: 0
-fl_weight_scale: 5
-fl_adv_group_size: 5
-# fl_single_epoch_attack: 10
+fl_weight_scale: 1
+fl_adv_group_size: 2
+# fl_single_epoch_attack: 200
 
 attack: ModelReplace
-defense: FedAvg
-fl_num_neurons: 100
+defense: 'FedAvg'
+fl_num_neurons: 5
 noise_mask_alpha: 0 # 0.5
 lagrange_step: 0.1

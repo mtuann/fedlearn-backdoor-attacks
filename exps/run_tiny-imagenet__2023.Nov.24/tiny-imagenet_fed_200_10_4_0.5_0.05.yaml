@@ -21,7 +21,7 @@ backdoor_label: 8
 
 resume_model: saved_models/tiny_64_pretrain/tiny-resnet.epoch_20
 
-save_model: True
+save_model: False
 log: True
 report_train_loss: False
 
@@ -31,7 +31,7 @@ fl: True
 fl_no_models: 10
 fl_local_epochs: 2
 fl_poison_epochs: 10
-fl_total_participants: 100
+fl_total_participants: 200
 fl_eta: 1
 fl_sample_dirichlet: True
 fl_dirichlet_alpha: 0.5

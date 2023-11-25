@@ -17,7 +17,7 @@ log_interval: 100
 poisoning_proportion: 1.0
 backdoor_label: 8
 
-# resume_model: saved_models/mnist_pretrain/model_last.pt.tar.epoch_10
+resume_model: saved_models/mnist_pretrain/model_last.pt.tar.epoch_10
 
 save_model: True
 log: True

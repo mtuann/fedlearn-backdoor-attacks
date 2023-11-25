@@ -21,7 +21,7 @@ backdoor_label: 8
 
 resume_model: saved_models/tiny_64_pretrain/tiny-resnet.epoch_20
 
-save_model: True
+save_model: False
 log: True
 report_train_loss: False
 

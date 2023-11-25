@@ -4,7 +4,7 @@ import torch.utils.data as torch_data
 import torchvision
 from torchvision.transforms import transforms
 
-from models.simple import SimpleNet
+from models.MnistNet import MnistNet
 from tasks.task import Task
 import logging
 logger = logging.getLogger('logger')
@@ -79,4 +79,5 @@ class MNISTTask(Task):
         return True
 
     def build_model(self):
-        return SimpleNet(num_classes=len(self.classes))
+        # return SimpleNet(num_classes=len(self.classes))
+        return MnistNet()

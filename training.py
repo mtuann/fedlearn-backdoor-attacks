@@ -103,19 +103,25 @@ def run(hlpr: Helper):
         main_metric = hlpr.task.get_metrics()
         
         # logger.info(f"Epoch {epoch} main metric: {metric}")
-        metric_bd = test(hlpr, epoch, backdoor=True)
+        # metric_bd = test(hlpr, epoch, backdoor=True)
         backdoor_metric = hlpr.task.get_metrics()
         
         
-        # wandb.log({'main_acc': main_metric['accuracy'], 'main_loss': main_metric['loss'], 
-        #           'backdoor_acc': backdoor_metric['accuracy'], 'backdoor_loss': backdoor_metric['loss']}, 
-        #           step=epoch)
+        wandb.log({'main_acc': main_metric['accuracy'], 'main_loss': main_metric['loss'], 
+                  'backdoor_acc': backdoor_metric['accuracy'], 'backdoor_loss': backdoor_metric['loss']}, 
+                  step=epoch)
         logger.info(f"Epoch {epoch} backdoor metric: {metric}")
         
         # hlpr.record_accuracy(metric, test(hlpr, epoch, backdoor=True), epoch)
 
         hlpr.save_model(hlpr.task.model, epoch, metric)
         
+def generate_exps_file(root_file='cifar_fed.yaml'):
+    # read file as a string
+    with open(root_file, 'r') as file :
+        filedata = file.read()
+    print(len(filedata), type(filedata))    
+    pass        
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Backdoors')
@@ -129,24 +135,18 @@ if __name__ == '__main__':
     with open(args.params) as f:
         params = yaml.load(f, Loader=yaml.FullLoader)
     # print(params)
-    params['name'] = f'{args.name}.{params["fl_total_participants"]}_{params["fl_no_models"]}_{params["fl_number_of_adversaries"]}_{params["fl_dirichlet_alpha"]}'
+    params['name'] = f'{args.name}.{params["fl_total_participants"]}_{params["fl_no_models"]}_{params["fl_number_of_adversaries"]}_{params["fl_dirichlet_alpha"]}_{params["lr"]}'
     
-    params['current_time'] = datetime.now().strftime('%Y.%m.%b_%H.%M.%S')
+    params['current_time'] = datetime.now().strftime('%Y.%b.%d_%H.%M.%S')
     print(params)
     # exit(0)
     helper = Helper(params)
     
     # logger = create_logger()
-    # - Exp 01: fl_total_participants/ fl_no_models/ fl_number_of_adversaries: 200/ 20/ 4; fl_dirichlet_alpha: 0.5; lr: 0.02
-    # - Exp 02: fl_total_participants/ fl_no_models/ fl_number_of_adversaries: 200/ 10/ 4; fl_dirichlet_alpha: 0.5; lr: 0.02
-    # - Exp 03: fl_total_participants/ fl_no_models/ fl_number_of_adversaries: 100/ 10/ 4; fl_dirichlet_alpha: 0.5; lr: 0.02
-    # - Exp 04: fl_total_participants/ fl_no_models/ fl_number_of_adversaries: 100/ 10/ 4; fl_dirichlet_alpha: 0.5; lr: 0.01
-    # - Exp 05: fl_total_participants/ fl_no_models/ fl_number_of_adversaries: 100/ 10/ 4; fl_dirichlet_alpha: 0.5; lr: 0.05
-
-    
     
     # logger.info(create_table(params))
-    # wandb.init(project="simple-backdoor-fl", entity="mtuann", name=f"{params['name']}-{params['current_time']}-{params['fl_total_participants']}-{params['fl_no_models']}-{params['fl_number_of_adversaries']}-{params['fl_dirichlet_alpha']}-{params['lr']}")
+    
+    wandb.init(project="benchmark-backdoor-fl", entity="mtuann", name=f"{params['name']}-{params['current_time']}")
     
     try:
         run(helper)
