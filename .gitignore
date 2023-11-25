@@ -9,6 +9,5 @@ __pycache__/
 *.pyc
 saved_models/
 .data/
-models/
 wandb/
 *.zip
