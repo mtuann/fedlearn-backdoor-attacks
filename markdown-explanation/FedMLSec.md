@@ -20,7 +20,7 @@ Table of Contents
 ## Attack Customization
 ### [Model Replacement Attack (MRA)](https://arxiv.org/pdf/1807.00459.pdf)
 - [Code](https://github.com/ebagdasa/backdoors101) is in `fedlearn-backdoor-attacks/3DFed/attacks/modelreplace.py`
-![Alt text](uploaded-figures/model-replacement-attack.png)
+![Alt text](./model-replacement-attack.png)
 
 
 ## Defense Customization
@@ -114,14 +114,14 @@ For more details, check `FedML` [dataset](https://github.com/FedML-AI/FedML/tree
 
 ### [How To Backdoor Federated Learning (AISTATS'20)](https://github.com/ebagdasa/backdoors101)
 - Generate trigger in file `synthesizers/pattern_synthesizer.py`. The 2 images below are the pattern of the trigger and image with trigger.
-<!-- ![Alt text](uploaded-figures/Figure_full-image-pattern.png)
-![Alt text](uploaded-figures/Figure_4_ba_norm.png) -->
+<!-- ![Alt text](./Figure_full-image-pattern.png)
+![Alt text](./Figure_4_ba_norm.png) -->
 - All the original images and trigger images are normalized to [mean, std] of the original dataset
 
 <div style="display:flex">
-    <img src="uploaded-figures/Figure_full-image-pattern.png" 
+    <img src="./Figure_full-image-pattern.png" 
         alt="Trigger" width="400"/>
-    <img src="uploaded-figures/Figure_4_ba_norm.png" 
+    <img src="./Figure_4_ba_norm.png" 
     alt="Image 2" width="400"/>
 </div>
 

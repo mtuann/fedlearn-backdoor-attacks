@@ -17,7 +17,6 @@ log_interval: 100
 poisoning_proportion: 0.5
 backdoor_label: 8
 
-# resume_model:
 resume_model: saved_models/cifar_pretrain/model_last.pt.tar.epoch_200
 
 save_model: True

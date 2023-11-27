@@ -11,3 +11,5 @@ saved_models/
 .data/
 wandb/
 *.zip
+exps/run*
+env-variables.md

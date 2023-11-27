@@ -135,9 +135,10 @@ if __name__ == '__main__':
     with open(args.params) as f:
         params = yaml.load(f, Loader=yaml.FullLoader)
     # print(params)
-    pretrained_str = 'pretrained' if 'resume_model' in params else 'no_pretrained'
+    # import IPython; IPython.embed()
+    pretrained_str = 'pretrained' if params['resume_model'] else 'no_pretrained'
     
-    params['name'] = f'{args.name}.{params["fl_total_participants"]}_{params["fl_no_models"]}_{params["fl_number_of_adversaries"]}_{params["fl_dirichlet_alpha"]}_{params["lr"]}_{pretrained_str}'
+    params['name'] = f'vishc_{args.name}.{params["fl_total_participants"]}_{params["fl_no_models"]}_{params["fl_number_of_adversaries"]}_{params["fl_dirichlet_alpha"]}_{params["lr"]}_{pretrained_str}'
     
     params['current_time'] = datetime.now().strftime('%Y.%b.%d_%H.%M.%S')
     print(params)
@@ -149,7 +150,6 @@ if __name__ == '__main__':
     # logger.info(create_table(params))
     
     wandb.init(project="benchmark-backdoor-fl", entity="mtuann", name=f"{params['name']}-{params['current_time']}")
-    
     try:
         run(helper)
     except Exception as e:
