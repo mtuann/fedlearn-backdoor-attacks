@@ -13,3 +13,5 @@ wandb/
 *.zip
 exps/run*
 env-variables.md
+synthesizers/checkpoint/
+synthesizers/atkmodel/

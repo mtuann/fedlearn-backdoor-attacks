@@ -1,5 +1,5 @@
 task: Cifar10
-synthesizer: Pattern
+synthesizer: IBA
 
 random_seed: 42
 batch_size: 256

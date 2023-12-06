@@ -11,6 +11,7 @@ class Params:
     # Corresponds to the class module: tasks.mnist_task.MNISTTask
     # See other tasks in the task folder.
     task: str = 'MNIST'
+    num_classes = 10 #TODO: update num_classes for TinyImageNet
 
     current_time: str = None
     name: str = None

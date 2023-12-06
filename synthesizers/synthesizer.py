@@ -31,17 +31,18 @@ class Synthesizer:
         # import IPython; IPython.embed(); exit(0)
         # batch.inputs.shape = (batch_size, 3, 32, 32) = (64, 3,  32, 32)
         # using torch to show the image
-        # import matplotlib.pyplot as plt
-        # import numpy as np
-        # import torchvision
-        # import torchvision.transforms as transforms
-        # def imshow(img):
-        #     # img to cpu
-        #     img = img.cpu()
-        #     # img = img / 2 + 0.5     # unnormalize
-        #     npimg = img.numpy()
-        #     plt.imshow(np.transpose(npimg, (1, 2, 0)))
-        #     plt.show()
+        import matplotlib.pyplot as plt
+        import numpy as np
+        import torchvision
+        import torchvision.transforms as transforms
+        def imshow(img):
+            # img to cpu
+            img = img.cpu()
+            # img = img / 2 + 0.5     # unnormalize
+            npimg = img.numpy()
+            plt.imshow(np.transpose(npimg, (1, 2, 0)))
+            plt.show()
+            imshow(torchvision.utils.make_grid(batch.inputs))
             
         # def imshow2(img):
         #     # img to cpu
